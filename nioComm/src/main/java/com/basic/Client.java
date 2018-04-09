@@ -13,29 +13,10 @@ import java.util.Iterator;
  * Created by mastertj on 2018/4/8.
  */
 public class Client implements Runnable{
-    private  ByteBuffer writeBuffer=ByteBuffer.allocate(1024);
+    private ByteBuffer writeBuffer=ByteBuffer.allocate(1024);
     private ByteBuffer readBuffer=ByteBuffer.allocate(1024);
-    private SocketChannel socketChannel=null;
-    private Selector selector=null;
 
     public Client() {
-        InetSocketAddress address=new InetSocketAddress("localhost",8765);
-        try {
-            selector=Selector.open();
-            socketChannel=SocketChannel.open();
-            socketChannel.configureBlocking(false);
-            socketChannel.register(selector, SelectionKey.OP_READ|SelectionKey.OP_WRITE|SelectionKey.OP_CONNECT);
-            socketChannel.connect(address);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                socketChannel.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public static void main(String[] args) throws IOException {
@@ -45,8 +26,17 @@ public class Client implements Runnable{
 
     @Override
     public void run() {
-        while (true){
-            try {
+        SocketChannel channel=null;
+        Selector selector=null;
+        try {
+            channel = SocketChannel.open();
+            channel.configureBlocking(false);
+            //请求连接
+            channel.connect(new InetSocketAddress("localhost", 8765));
+            selector = Selector.open();
+            channel.register(selector, SelectionKey.OP_CONNECT);
+
+            while (true){
                 //1.必须让多路复用器开始监听
                 selector.select();
                 Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
@@ -55,50 +45,37 @@ public class Client implements Runnable{
                     //直接从容器中移除就行
                     iterator.remove();
                     if (next.isValid()) {
-                        if (next.isReadable()) {
-                            this.read(next);
-                        }
-                        if(next.isWritable()){
-                            this.write(next);
-                        }
                         if(next.isConnectable()){
                             this.connect(next);
                         }
+                        if (next.isReadable()) {
+                            this.read(next);
+                        }
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void connect(SelectionKey next) {
-        //System.out.println("connect");
-        try {
-            while (true){
-                byte[] bytes=new byte[1024];
-                System.in.read(bytes);
-                writeBuffer.put(bytes);
-                writeBuffer.flip();
-                socketChannel.write(writeBuffer);
-                writeBuffer.clear();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void write(SelectionKey next) {
-        System.out.println("--------------write-------------");
+    private void connect(SelectionKey next) {
+        System.out.println("connect");
+        SocketChannel socketChannel= (SocketChannel) next.channel();
         try {
-            if(writeBuffer.position()!=0){
-                SocketChannel socketChannel= (SocketChannel) next.channel();
-                socketChannel.configureBlocking(false);
-                writeBuffer.flip();
-                socketChannel.write(writeBuffer);
-                writeBuffer.clear();
+            if (socketChannel.isConnectionPending()) {
+                if (socketChannel.finishConnect()) {
+                    //只有当连接成功后才能注册OP_READ事件
+                    next.interestOps(SelectionKey.OP_READ);
+                    byte[] bytes = new byte[1024];
+                    System.in.read(bytes);
+                    writeBuffer.put(bytes);
+                    writeBuffer.flip();
+                    socketChannel.write(writeBuffer);
+                    writeBuffer.clear();
+                }
             }
-        } catch (IOException e) {
+        }catch (IOException e) {
             e.printStackTrace();
         }
     }

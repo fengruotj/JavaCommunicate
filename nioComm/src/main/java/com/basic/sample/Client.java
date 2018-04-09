@@ -43,7 +43,7 @@ public class Client implements Runnable{
             channel.register(selector, SelectionKey.OP_CONNECT);
             boolean isOver = false;
 
-            while(! isOver){
+            while(!isOver){
                 selector.select();
                 Iterator ite = selector.selectedKeys().iterator();
                 while(ite.hasNext()){

@@ -57,10 +57,6 @@ public class Server implements Runnable {
                             this.accept(next);
                         }
 
-                        if(next.isConnectable()){
-                            this.connect(next);
-                        }
-
                         if(next.isReadable()){
                             this.read(next);
                         }
@@ -78,17 +74,6 @@ public class Server implements Runnable {
 
     private void write(SelectionKey next) {
         //System.out.println("--------------write-------------");
-        try {
-            if(writeBuffer.position()!=0){
-                SocketChannel socketChannel= (SocketChannel) next.channel();
-                socketChannel.configureBlocking(false);
-                writeBuffer.flip();
-                socketChannel.write(writeBuffer);
-                writeBuffer.clear();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void read(SelectionKey next) {
@@ -108,9 +93,12 @@ public class Server implements Runnable {
             readBuffer.get(bytes);
             String result=new String (bytes,"UTF-8");
             System.out.print("Client send data: "+result);
-            socketChannel.register(this.selector,SelectionKey.OP_WRITE);
+
+            writeBuffer.clear();
             String reuslt="服务器响应";
             writeBuffer.put(reuslt.getBytes());
+            writeBuffer.flip();
+            socketChannel.write(writeBuffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -128,7 +116,7 @@ public class Server implements Runnable {
             //2.执行阻塞方法（等待客户端的通道）
             SocketChannel socketChannel = ssc.accept();
             socketChannel.configureBlocking(false);
-            socketChannel.register(selector,SelectionKey.OP_READ);
+            socketChannel.register(this.selector,SelectionKey.OP_READ);
         } catch (IOException e) {
             e.printStackTrace();
         }
