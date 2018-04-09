@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="aioComm" />
         <module name="basicComm" />
         <module name="bioComm" />
         <module name="JavaStudy" />
@@ -13,6 +14,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="aioComm" target="1.8" />
       <module name="basicComm" target="1.8" />
       <module name="bioComm" target="1.8" />
       <module name="JavaCommunicate" target="1.8" />

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/JavaCommunicate.iml" filepath="$PROJECT_DIR$/JavaCommunicate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aioComm/aioComm.iml" filepath="$PROJECT_DIR$/aioComm/aioComm.iml" />
       <module fileurl="file://$PROJECT_DIR$/basicComm/basicComm.iml" filepath="$PROJECT_DIR$/basicComm/basicComm.iml" />
       <module fileurl="file://$PROJECT_DIR$/bioComm/bioComm.iml" filepath="$PROJECT_DIR$/bioComm/bioComm.iml" />
       <module fileurl="file://$PROJECT_DIR$/nioComm/nioComm.iml" filepath="$PROJECT_DIR$/nioComm/nioComm.iml" />
