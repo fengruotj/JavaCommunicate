@@ -64,8 +64,7 @@ public class Client implements Runnable{
         new Thread(client3).start();
 
         client1.write("hello i am client1");
-        client1.write("hello i am client1");
-        //client2.write("hello i am client2");
-        //client3.write("hello i am client3");
+        client2.write("hello i am client2");
+        client3.write("hello i am client3");
     }
 }
