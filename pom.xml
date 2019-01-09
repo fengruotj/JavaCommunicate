@@ -9,10 +9,10 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>basicComm</module>
-        <module>bioComm</module>
-        <module>nioComm</module>
-        <module>aioComm</module>
+        <module>communication-basic</module>
+        <module>communication-bio</module>
+        <module>communication-nio</module>
+        <module>communication-aio</module>
     </modules>
 
     <dependencies>

@@ -6,17 +6,25 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="aioComm" />
-        <module name="basicComm" />
-        <module name="bioComm" />
+        <module name="communication-aio" />
+        <module name="communication-basic" />
+        <module name="communication-bio" />
+        <module name="communication-nio" />
         <module name="JavaStudy" />
-        <module name="nioComm" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="aioComm" target="1.8" />
       <module name="basicComm" target="1.8" />
       <module name="bioComm" target="1.8" />
+      <module name="communication-aio" target="1.8" />
+      <module name="communication-basic" target="1.8" />
+      <module name="communication-bio" target="1.8" />
+      <module name="communication-nio" target="1.8" />
+      <module name="java-aio" target="1.8" />
+      <module name="java-basic" target="1.8" />
+      <module name="java-bio" target="1.8" />
+      <module name="java-nio" target="1.8" />
       <module name="JavaCommunicate" target="1.8" />
       <module name="JavaStudy" target="1.7" />
       <module name="nioComm" target="1.8" />
