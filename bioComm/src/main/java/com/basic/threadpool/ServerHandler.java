@@ -1,4 +1,4 @@
-package com.basic;
+package com.basic.threadpool;
 
 import java.io.*;
 import java.net.Socket;

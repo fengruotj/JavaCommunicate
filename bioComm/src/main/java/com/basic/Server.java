@@ -1,31 +1,39 @@
 package com.basic;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * locate com.basic
- * Created by mastertj on 2018/4/8.
+ * Created by MasterTj on 2019/1/9.
  */
 public class Server {
-    public static int prot=8999;
+    public static int port=8999;
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket=new ServerSocket(prot);
-        ExecutorService service= Executors.newCachedThreadPool();
+        ServerSocket serverSocket=new ServerSocket(port);
+        Socket socket = serverSocket.accept();
 
+        BufferedReader bufferedReader;
+         BufferedWriter bufferedWriter;
         try {
-            while (true){
-                Socket socket = serverSocket.accept();
-                service.execute(new ServerHandler(socket));
-            }
+            bufferedReader =new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            bufferedWriter=new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            String line = bufferedReader.readLine();
+            System.out.println(Thread.currentThread().getName()+" 从客户端收到内容: "+line);
+
+            bufferedWriter.write("服务器端传来相应");
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            serverSocket.close();
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
